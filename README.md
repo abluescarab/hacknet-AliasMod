@@ -1,5 +1,5 @@
 # Alias Mod
-This mod adds the ability to alias commands in Hacknet.
+This mod adds the ability to alias commands in Hacknet. You need [Hacknet Pathfinder](https://github.com/Arkhist/Hacknet-Pathfinder/releases) to use this mod.
 
 ## Usage
 * **alias show _(alias)_** - show a list of aliases or display what an alias does
