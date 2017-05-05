@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Hacknet;
@@ -42,7 +43,9 @@ namespace AliasMod {
         public static KeyValuePair<string, string> ToKeyValuePair(FileEntry file, int line) {
             List<string> data = file.data.Split('\n').ToList();
             string ln = data[line];
-            return ToKeyValuePair(ln);
+
+            if(string.IsNullOrWhiteSpace(ln)) return default(KeyValuePair<string, string>);
+            else return ToKeyValuePair(ln);
         }
 
         /// <summary>
@@ -51,7 +54,7 @@ namespace AliasMod {
         public static KeyValuePair<string, string> ToKeyValuePair(string text) {
             string key = text.Substring(0, text.IndexOf('='));
             string value = StripQuotes(text.Substring(text.IndexOf('=') + 1));
-
+            
             return new KeyValuePair<string, string>(key, value);
         }
 

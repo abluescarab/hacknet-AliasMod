@@ -23,7 +23,7 @@ namespace AliasMod {
             /// Run the alias command.
             /// </summary>
             public static bool RunCommand(OS os, List<string> args) {
-                if(firstRun || aliases == null) {
+                if(firstRun) {
                     Load(os);
                     firstRun = false;
                 }
@@ -97,7 +97,7 @@ namespace AliasMod {
 
                 return true;
             }
-            
+
             /// <summary>
             /// Show the list of aliases.
             /// </summary>
@@ -147,16 +147,27 @@ namespace AliasMod {
             /// </summary>
             private static void Load(OS os) {
                 FileEntry file = GetFile(os);
-                aliases = new Dictionary<string, Alias>();
 
-                int lines = file.data.Split('\n').Length;
+                if(aliases == null) {
+                    aliases = new Dictionary<string, Alias>();
+                }
+                else aliases.Clear();
 
-                for(int i = 0; i < lines; i++) {
-                    KeyValuePair<string, string> pair = AliasUtils.ToKeyValuePair(file, i);
-                    Alias alias = new Alias(pair.Key, pair.Value);
-                    aliases[pair.Key] = alias;
+                if(!string.IsNullOrWhiteSpace(file.data)) {
+                    int lines = file.data.Split('\n').Length;
 
-                    Handler.AddCommand(alias.Name, alias.RunCommand, autoComplete: true);
+                    if(lines > 0) {
+                        for(int i = 0; i < lines; i++) {
+                            KeyValuePair<string, string> pair = AliasUtils.ToKeyValuePair(file, i);
+
+                            if(!pair.Equals(default(KeyValuePair<string, string>))) {
+                                Alias alias = new Alias(pair.Key, pair.Value);
+                                aliases[pair.Key] = alias;
+
+                                Handler.AddCommand(alias.Name, alias.RunCommand, autoComplete: true);
+                            }
+                        }
+                    }
                 }
 
                 os.write("Loaded aliases.");
