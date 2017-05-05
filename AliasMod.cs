@@ -5,7 +5,7 @@ using Pathfinder.Util;
 namespace AliasMod {
     public class AliasMod : IPathfinderMod {
         public const string Name = "Alias Mod";
-        public const string Version = "1_0";
+        public const string Version = "1_1";
         public const string Filename = "aliases.sys";
         public const string ID = Name + " v" + Version;
         public string Identifier => ID;
