@@ -31,7 +31,7 @@ namespace AliasMod {
                 os.write("\n");
 
                 if(args.Count < 2) {
-                    ShowUsage(os);
+                    os.write(defaultUsage);
                     return false;
                 }
 
@@ -91,21 +91,13 @@ namespace AliasMod {
                     }
                 }
                 else {
-                    ShowUsage(os);
+                    os.write(defaultUsage);
                     return false;
                 }
 
                 return true;
             }
-
-            /// <summary>
-            /// Show the usage instructions.
-            /// </summary>
-            private static void ShowUsage(OS os) {
-                os.write("\n");
-                os.write(defaultUsage);
-            }
-
+            
             /// <summary>
             /// Show the list of aliases.
             /// </summary>
