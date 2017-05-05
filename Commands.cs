@@ -74,7 +74,7 @@ namespace AliasMod {
 
                     os.write("Added alias \"" + alias.Name + "\".");
 
-                    Handler.AddCommand(alias.Name, alias.RunCommand, autoComplete: true);
+                    Handler.AddCommand(alias.Name, alias.RunCommand);
                 }
                 else if(args[1].Equals("remove")) {
                     if(args.Count < 3) {
@@ -116,18 +116,23 @@ namespace AliasMod {
             /// Add an alias.
             /// </summary>
             private static Alias Add(OS os, string name, string command) {
-                Alias alias;
+                Alias alias = null;
                 FileEntry file = GetFile(os);
 
-                if(aliases.ContainsKey(name)) {
-                    alias = aliases[name];
-                    alias.Command = command;
-                    AliasUtils.Replace(file, name, command);
+                if(CanAdd(os, name)) {
+                    if(aliases.ContainsKey(name)) {
+                        alias = aliases[name];
+                        alias.Command = command;
+                        AliasUtils.Replace(file, name, command);
+                    }
+                    else {
+                        alias = new Alias(name, command);
+                        aliases[alias.Name] = alias;
+                        AliasUtils.Append(file, name, command);
+                    }
                 }
                 else {
-                    alias = new Alias(name, command);
-                    aliases[alias.Name] = alias;
-                    AliasUtils.Append(file, name, command);
+                    os.write("Cannot create alias: name is reserved. Please try a different name.");
                 }
 
                 return alias;
@@ -164,7 +169,7 @@ namespace AliasMod {
                                 Alias alias = new Alias(pair.Key, pair.Value);
                                 aliases[pair.Key] = alias;
 
-                                Handler.AddCommand(alias.Name, alias.RunCommand, autoComplete: true);
+                                Handler.AddCommand(alias.Name, alias.RunCommand);
                             }
                         }
                     }
@@ -189,6 +194,13 @@ namespace AliasMod {
                 }
 
                 return file;
+            }
+
+            /// <summary>
+            /// Check if a command can be added.
+            /// </summary>
+            private static bool CanAdd(OS os, string name) {
+                return !ProgramList.programs.Contains(name) && !ProgramList.getExeList(os).Contains(name);
             }
         }
     }
