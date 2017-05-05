@@ -8,8 +8,8 @@ namespace AliasMod {
         public const string Version = "1_1";
         public const string Filename = "aliases.sys";
         public const string ID = Name + " v" + Version;
-        public string Identifier => ID;
         public const string Homepage = "https://github.com/abluescarab/hacknet-aliasmod";
+        public string Identifier => ID;
 
         public void Load() {
             Logger.Verbose("Loading " + ID + "...");
