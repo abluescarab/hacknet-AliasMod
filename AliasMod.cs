@@ -20,7 +20,7 @@ namespace AliasMod {
         }
 
         public void Unload() {
-            Logger.Verbose("Unloading " + Name + "...");
+            Logger.Verbose("Unloading " + ID + "...");
         }
     }
 }
