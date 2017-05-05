@@ -6,10 +6,32 @@ using Hacknet;
 namespace AliasMod {
     static class AliasUtils {
         /// <summary>
+        /// Get the file that aliases are stored in.
+        /// </summary>
+        public static FileEntry GetFile(OS os) {
+            Folder folder = os.thisComputer.getFolderFromPath("sys");
+            FileEntry file;
+
+            if(!folder.containsFile(AliasMod.Filename)) {
+                file = new FileEntry("", AliasMod.Filename);
+                folder.files.Add(file);
+            }
+            else {
+                file = folder.searchForFile(AliasMod.Filename);
+            }
+
+            return file;
+        }
+
+        /// <summary>
         /// Append a key/value pair to a file.
         /// </summary>
         public static void Append(FileEntry file, string key, string value) {
             file.data += "\n" + ToKeyValueString(key, value);
+        }
+
+        public static void Append(FileEntry file, string text) {
+            file.data += "\n" + text;
         }
 
         /// <summary>
@@ -32,7 +54,7 @@ namespace AliasMod {
         /// Combine a key string and value string into a key/value string.
         /// </summary>
         public static string ToKeyValueString(string key, string value) {
-            return key + "=\"" + value + "\"";
+            return key + "='" + value + "'";
         }
 
         /// <summary>
@@ -61,7 +83,7 @@ namespace AliasMod {
         /// Strip the surrounding quotes from a string.
         /// </summary>
         public static string StripQuotes(string text) {
-            return Regex.Replace(text, "^\"|\"$", "");
+            return Regex.Replace(text, "^\'|\'$", "");
         }
     }
 }
