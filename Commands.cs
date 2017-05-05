@@ -73,8 +73,6 @@ namespace AliasMod {
                     Alias alias = Add(os, args[2], command);
 
                     os.write("Added alias \"" + alias.Name + "\".");
-
-                    Handler.AddCommand(alias.Name, alias.RunCommand);
                 }
                 else if(args[1].Equals("remove")) {
                     if(args.Count < 3) {
@@ -130,6 +128,8 @@ namespace AliasMod {
                         aliases[alias.Name] = alias;
                         AliasUtils.Append(file, name, command);
                     }
+
+                    Handler.AddCommand(alias.Name, alias.RunCommand);
                 }
                 else {
                     os.write("Cannot create alias: name is reserved. Please try a different name.");
