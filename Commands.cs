@@ -182,7 +182,7 @@ namespace AliasMod {
             /// Get the file that aliases are stored in.
             /// </summary>
             private static FileEntry GetFile(OS os) {
-                Folder folder = Programs.getFolderAtDepth(os, 0).searchForFolder("sys");
+                Folder folder = os.thisComputer.getFolderFromPath("sys");
                 FileEntry file;
 
                 if(!folder.containsFile(AliasMod.Filename)) {
