@@ -2,7 +2,7 @@
 using Hacknet;
 
 namespace AliasMod {
-    class Alias {
+    public class Alias {
         public string Name { get; }
         public string Command { get; set; }
 
