@@ -1,4 +1,7 @@
-﻿v4.0 2017-05-06
+﻿v4.1  2017-05-6
+* Added instruction for multicommands
+
+v4.0  2017-05-06
 * Allows executing of multiple commands in one alias
 
 v3.0  2017-05-06
