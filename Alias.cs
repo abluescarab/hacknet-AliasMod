@@ -17,14 +17,22 @@ namespace AliasMod {
                 return false;
             }
             else {
-                if(args.Count > 1) {
-                    string command = string.Join(" ", args.ToArray());
-                    command = command.Substring(command.IndexOf(Name) + Name.Length + 1);
-                    command = Command + (Regex.IsMatch(command, @"^(/|\))") ? "" : " ") + command;
-                    os.execute(command);
+                if(Command.Contains(";")) {
+                    string[] commands = Command.Split(';');
+                    foreach(string command in commands) {
+                        os.execute(command.Trim());
+                    }
                 }
                 else {
-                    os.execute(Command);
+                    if(args.Count > 1) {
+                        string command = string.Join(" ", args.ToArray());
+                        command = command.Substring(command.IndexOf(Name) + Name.Length + 1);
+                        command = Command + (Regex.IsMatch(command, @"^(/|\))") ? "" : " ") + command;
+                        os.execute(command);
+                    }
+                    else {
+                        os.execute(Command);
+                    }
                 }
 
                 return true;
