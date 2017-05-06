@@ -1,5 +1,7 @@
 ﻿v3.0  2017-05-06
-
+* Allows overriding of in-game commands
+* Allows arguments supplied to aliases
+* Loads aliases on startup
 
 v2.0  2017-05-05
 * Changed to Unix-like command syntax
