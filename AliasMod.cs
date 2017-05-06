@@ -15,7 +15,6 @@ namespace AliasMod {
         public string Identifier => ID;
 
         public static Dictionary<string, Alias> aliases;
-        public static CommandSentEvent commandSent;
 
         public void Load() {
             Logger.Verbose("Loading " + ID + "...");
