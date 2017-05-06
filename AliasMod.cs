@@ -10,6 +10,7 @@ namespace AliasMod {
         public const string Filename = "aliases.sys";
         public const string ID = Name + " v" + Version;
         public const string Homepage = "https://github.com/abluescarab/hacknet-aliasmod";
+        public const string Author = "abluescarab";
         public string Identifier => ID;
 
         public static Dictionary<string, Alias> aliases;

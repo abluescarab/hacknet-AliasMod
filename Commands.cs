@@ -97,7 +97,7 @@ namespace AliasMod {
                 os.write(
                     AliasMod.Name +
                     "\nVersion: " + AliasMod.Version +
-                    "\nAuthor: abluescarab" +
+                    "\nAuthor: " + AliasMod.Author +
                     "\nHomepage: " + AliasMod.Homepage
                 );
             }
