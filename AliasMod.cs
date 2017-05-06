@@ -19,6 +19,7 @@ namespace AliasMod {
         public void Load() {
             Logger.Verbose("Loading " + ID + "...");
             EventManager.RegisterListener<CommandSentEvent>(CheckCommand);
+            EventManager.RegisterListener<OSPostLoadContenEvent>(LoadAliases);
         }
 
         public void LoadContent() {
@@ -29,6 +30,7 @@ namespace AliasMod {
         public void Unload() {
             Logger.Verbose("Unloading " + ID + "...");
             EventManager.UnregisterListener<CommandSentEvent>(CheckCommand);
+            EventManager.UnregisterListener<OSPostLoadContenEvent>(LoadAliases);
         }
 
         /// <summary>
@@ -39,6 +41,13 @@ namespace AliasMod {
                 e.IsCancelled = true;
                 aliases[e.Arguments[0]].RunCommand(e.OS, e.Arguments);
             }
+        }
+
+        /// <summary>
+        /// Load aliases on startup.
+        /// </summary>
+        private void LoadAliases(OSPostLoadContenEvent e) {
+            Commands.AliasCmd.Load(e.OS);
         }
     }
 }

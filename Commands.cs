@@ -24,7 +24,6 @@ namespace AliasMod {
             public static bool RunCommand(OS os, List<string> args) {
                 if(firstRun) {
                     Load(os);
-                    firstRun = false;
                 }
 
                 os.write("\n");
@@ -139,7 +138,7 @@ namespace AliasMod {
             /// <summary>
             /// Reload the aliases from their file.
             /// </summary>
-            private static void Load(OS os) {
+            public static void Load(OS os) {
                 FileEntry file = AliasUtils.GetFile(os);
 
                 if(AliasMod.aliases == null) {
@@ -158,6 +157,8 @@ namespace AliasMod {
                         }
                     }
                 }
+
+                if(firstRun) firstRun = false;
 
                 os.write("Loaded aliases.");
             }
