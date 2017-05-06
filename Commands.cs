@@ -12,11 +12,18 @@ namespace AliasMod {
             private static bool firstRun = true;
 
             private static string usage =
-                "Usage: alias [-h] [-l] [-i] [name[=value]]" +
+                "Usage: alias [-h] [-l] [-i] [name[=value] ... ]" +
                 "\n" +
                 "\n    -h    display usage help" +
                 "\n    -l    reload aliases from alias file" +
-                "\n    -i    display mod info";
+                "\n    -i    display mod info" +
+                "\n" +
+                "\nExamples:" +
+                "\n    alias ssh='SSHcrack 22'" +
+                "\n    alias sh='shell'" +
+                "\n" +
+                "\nTo create a multicommand alias:" +
+                "\n    alias hack='SSHcrack 22; FTPBounce 21'";
 
             /// <summary>
             /// Run the alias command.
