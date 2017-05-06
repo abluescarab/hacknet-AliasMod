@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Hacknet;
 using Pathfinder.Util;
 
@@ -147,16 +148,13 @@ namespace AliasMod {
                 else AliasMod.aliases.Clear();
 
                 if(!string.IsNullOrWhiteSpace(file.data)) {
-                    int lines = file.data.Split('\n').Length;
+                    List<string> data = file.data.Split('\n').Where(d => !string.IsNullOrWhiteSpace(d)).ToList();
 
-                    if(lines > 0) {
-                        for(int i = 0; i < lines; i++) {
-                            KeyValuePair<string, string> pair = AliasUtils.ToKeyValuePair(file, i);
-
-                            if(!pair.Equals(default(KeyValuePair<string, string>))) {
-                                Alias alias = new Alias(pair.Key, pair.Value);
-                                AliasMod.aliases[pair.Key] = alias;
-                            }
+                    if(data.Count > 0) {
+                        foreach(string line in data) {
+                            KeyValuePair<string, string> pair = AliasUtils.ToKeyValuePair(line);
+                            Alias alias = new Alias(pair.Key, pair.Value);
+                            AliasMod.aliases[pair.Key] = alias;
                         }
                     }
                 }
