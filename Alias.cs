@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using Hacknet;
 
 namespace AliasMod {
@@ -16,7 +17,16 @@ namespace AliasMod {
                 return false;
             }
             else {
-                os.execute(Command);
+                if(args.Count > 1) {
+                    string command = string.Join(" ", args.ToArray());
+                    command = command.Substring(command.IndexOf(Name) + Name.Length + 1);
+                    command = Command + (Regex.IsMatch(command, @"^(/|\))") ? "" : " ") + command;
+                    os.execute(command);
+                }
+                else {
+                    os.execute(Command);
+                }
+
                 return true;
             }
         }
