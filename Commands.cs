@@ -1,11 +1,6 @@
 ﻿using System.Collections.Generic;
 using Hacknet;
-using Pathfinder.Command;
 using Pathfinder.Util;
-
-/* todo: make command listener, listen to terminal input and check against dictionary
- * create KeyValuePairFile
- */
 
 namespace AliasMod {
     static class Commands {
@@ -15,7 +10,7 @@ namespace AliasMod {
 
             private static bool firstRun = true;
 
-            private static string usage = 
+            private static string usage =
                 "Usage: alias [-h] [-l] [-i] [name[=value]]" +
                 "\n" +
                 "\n    -h    display usage help" +
@@ -126,22 +121,15 @@ namespace AliasMod {
                 string name = alias.Remove(alias.IndexOf('='));
                 string command = AliasUtils.StripQuotes(alias.Remove(0, alias.IndexOf('=') + 1));
 
-                if(CanAlias(os, name)) {
-                    if(AliasMod.aliases.ContainsKey(name)) {
-                        al = AliasMod.aliases[name];
-                        al.Command = command;
-                        AliasUtils.Replace(file, name, command);
-                    }
-                    else {
-                        al = new Alias(name, command);
-                        AliasMod.aliases[al.Name] = al;
-                        AliasUtils.Append(file, alias);
-                    }
-
-                    Handler.AddCommand(al.Name, al.RunCommand);
+                if(AliasMod.aliases.ContainsKey(name)) {
+                    al = AliasMod.aliases[name];
+                    al.Command = command;
+                    AliasUtils.Replace(file, name, command);
                 }
                 else {
-                    os.write("Cannot create alias: name is reserved. Please try a different name.");
+                    al = new Alias(name, command);
+                    AliasMod.aliases[al.Name] = al;
+                    AliasUtils.Append(file, alias);
                 }
 
                 return al;
@@ -168,21 +156,12 @@ namespace AliasMod {
                             if(!pair.Equals(default(KeyValuePair<string, string>))) {
                                 Alias alias = new Alias(pair.Key, pair.Value);
                                 AliasMod.aliases[pair.Key] = alias;
-
-                                Handler.AddCommand(alias.Name, alias.RunCommand);
                             }
                         }
                     }
                 }
 
                 os.write("Loaded aliases.");
-            }
-
-            /// <summary>
-            /// Check if a command can be aliased.
-            /// </summary>
-            private static bool CanAlias(OS os, string name) {
-                return !ProgramList.programs.Contains(name) && !ProgramList.getExeList(os).Contains(name);
             }
         }
 

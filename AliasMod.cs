@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Pathfinder;
 using Pathfinder.Command;
+using Pathfinder.Event;
 using Pathfinder.Util;
 
 namespace AliasMod {
@@ -14,9 +15,11 @@ namespace AliasMod {
         public string Identifier => ID;
 
         public static Dictionary<string, Alias> aliases;
+        public static CommandSentEvent commandSent;
 
         public void Load() {
             Logger.Verbose("Loading " + ID + "...");
+            EventManager.RegisterListener<CommandSentEvent>(CheckCommand);
         }
 
         public void LoadContent() {
@@ -26,6 +29,17 @@ namespace AliasMod {
 
         public void Unload() {
             Logger.Verbose("Unloading " + ID + "...");
+            EventManager.UnregisterListener<CommandSentEvent>(CheckCommand);
+        }
+
+        /// <summary>
+        /// Check if a command exists in the alias dictionary.
+        /// </summary>
+        private void CheckCommand(CommandSentEvent e) {
+            if(aliases.ContainsKey(e.Arguments[0])) {
+                e.IsCancelled = true;
+                aliases[e.Arguments[0]].RunCommand(e.OS, e.Arguments);
+            }
         }
     }
 }
