@@ -1,0 +1,20 @@
+﻿v3.0  2017-05-06
+
+
+v2.0  2017-05-05
+* Changed to Unix-like command syntax
+
+v1.4  2017-05-05
+* Looks for alias file only in user filesystem
+
+v1.3  2017-05-05
+* Safeguards against overriding in-game functions
+
+v1.2  2017-05-05
+* Fixed aliases not loading
+
+v1.1  2017-05-05
+* Removed blank line before usage information
+
+v1.0  2017-05-05
+Initial release.
