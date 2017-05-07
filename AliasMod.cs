@@ -14,7 +14,7 @@ namespace AliasMod {
         public const string Author = "abluescarab";
         public string Identifier => ID;
 
-        public static Dictionary<string, Alias> aliases;
+        public static SortedDictionary<string, Alias> aliases;
 
         public void Load() {
             Logger.Verbose("Loading " + ID + "...");

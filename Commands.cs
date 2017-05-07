@@ -145,7 +145,7 @@ namespace AliasMod {
             /// </summary>
             public static void Load(OS os) {
                 if(AliasMod.aliases == null) {
-                    AliasMod.aliases = new Dictionary<string, Alias>();
+                    AliasMod.aliases = new SortedDictionary<string, Alias>();
                 }
                 else AliasMod.aliases.Clear();
 
