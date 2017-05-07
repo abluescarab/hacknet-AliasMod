@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Hacknet;
 using Pathfinder.Util;
 
@@ -52,7 +51,7 @@ namespace AliasMod {
                     if(!args[startArg].Contains("=")) {
                         if(AliasMod.aliases.ContainsKey(name)) {
                             Logger.Verbose(AliasMod.aliases[name].Command);
-                            os.write(AliasUtils.ToKeyValueString(name, AliasMod.aliases[name].Command));
+                            os.write(KeyValueFile.ToKeyValueString(name, AliasMod.aliases[name].Command));
                         }
                         else {
                             os.write("Alias '" + name + "' not found");
@@ -123,20 +122,19 @@ namespace AliasMod {
             /// </summary>
             private static Alias Add(OS os, string alias) {
                 Alias al = null;
-                FileEntry file = AliasUtils.GetFile(os);
-
+                
                 string name = alias.Remove(alias.IndexOf('='));
-                string command = AliasUtils.StripQuotes(alias.Remove(0, alias.IndexOf('=') + 1));
+                string command = KeyValueFile.StripQuotes(alias.Remove(0, alias.IndexOf('=') + 1));
 
                 if(AliasMod.aliases.ContainsKey(name)) {
                     al = AliasMod.aliases[name];
                     al.Command = command;
-                    AliasUtils.Replace(file, name, command);
+                    AliasMod.File.Replace(name, command);
                 }
                 else {
                     al = new Alias(name, command);
-                    AliasMod.aliases[al.Name] = al;
-                    AliasUtils.Append(file, alias);
+                    AliasMod.aliases[name] = al;
+                    AliasMod.File.Append(name, command);
                 }
 
                 return al;
@@ -146,22 +144,15 @@ namespace AliasMod {
             /// Reload the aliases from their file.
             /// </summary>
             public static void Load(OS os) {
-                FileEntry file = AliasUtils.GetFile(os);
-
                 if(AliasMod.aliases == null) {
                     AliasMod.aliases = new Dictionary<string, Alias>();
                 }
                 else AliasMod.aliases.Clear();
 
-                if(!string.IsNullOrWhiteSpace(file.data)) {
-                    List<string> data = file.data.Split('\n').Where(d => !string.IsNullOrWhiteSpace(d)).ToList();
-
-                    if(data.Count > 0) {
-                        foreach(string line in data) {
-                            KeyValuePair<string, string> pair = AliasUtils.ToKeyValuePair(line);
-                            Alias alias = new Alias(pair.Key, pair.Value);
-                            AliasMod.aliases[pair.Key] = alias;
-                        }
+                if(!string.IsNullOrWhiteSpace(AliasMod.File.Data)) {
+                    foreach(KeyValuePair<string, string> pair in AliasMod.File.All()) {
+                        Alias alias = new Alias(pair.Key, pair.Value);
+                        AliasMod.aliases[pair.Key] = alias;
                     }
                 }
 
@@ -202,7 +193,7 @@ namespace AliasMod {
                 }
 
                 AliasMod.aliases[name].Command = "";
-                AliasUtils.Remove(AliasUtils.GetFile(os), name);
+                AliasMod.File.Remove(name);
                 AliasMod.aliases.Remove(name);
                 return true;
             }

@@ -55,6 +55,7 @@
     <Compile Include="Commands.cs" />
     <Compile Include="AliasMod.cs" />
     <Compile Include="AliasUtils.cs" />
+    <Compile Include="KeyValueFile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -8,7 +8,7 @@ namespace AliasMod {
     public class AliasMod : IPathfinderMod {
         public const string Name = "Alias Mod";
         public const string Version = "4_1";
-        public const string Filename = "aliases.sys";
+        public static KeyValueFile File;
         public const string ID = Name + " v" + Version;
         public const string Homepage = "https://github.com/abluescarab/hacknet-aliasmod";
         public const string Author = "abluescarab";
@@ -47,6 +47,7 @@ namespace AliasMod {
         /// Load aliases on startup.
         /// </summary>
         private void LoadAliases(OSPostLoadContenEvent e) {
+            File = new KeyValueFile(e.OS, "aliases.sys", "sys");
             Commands.AliasCmd.Load(e.OS);
         }
     }
