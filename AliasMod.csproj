@@ -51,6 +51,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Alias.cs" />
+    <None Include="AliasMod.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="CHANGELOG" />
     <Compile Include="Commands.cs" />
     <Compile Include="AliasMod.cs" />

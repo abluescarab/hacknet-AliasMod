@@ -7,7 +7,7 @@ using Pathfinder.Util;
 namespace AliasMod {
     public class AliasMod : IPathfinderMod {
         public const string Name = "Alias Mod";
-        public const string Version = "4_1";
+        public const string Version = "4_3";
         public static KeyValueFile File;
         public const string ID = Name + " v" + Version;
         public const string Homepage = "https://github.com/abluescarab/hacknet-aliasmod";
