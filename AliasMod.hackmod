@@ -8,8 +8,5 @@
   "Authors": [
     "abluescarab"
   ],
-  "Info": "Alias Mod\r\n\r\nThis mod adds the ability to alias commands in Hacknet. You need Hacknet Pathfinder to use this mod.\r\n\r\nUsage\r\n\r\nUsage: alias [-h] [-l] [-i] [name[=value] ... ]\r\n\r\n    -h    display usage help\r\n    -l    reload aliases from alias file\r\n    -i    display mod info\r\n\r\nExamples:\r\n    alias ssh='SSHcrack 22'\r\n    alias sh='shell'\r\n\r\nTo create a multicommand alias:\r\n    alias hack='SSHcrack 22; FTPBounce 21'\r\n\r\nunalias <name>\r\nAlias File\r\n\r\nAliases are stored in ~/sys/aliases.sys and reloaded every time the game is restarted. If you edit the file manually, you will have to use the alias -l command to reload your aliases. You can also remove this file completely to remove all of your aliases at once.",
-  "Files": [
-    "AliasMod.dll"
-  ]
+  "Info": "Alias Mod\r\n\r\nThis mod adds the ability to alias commands in Hacknet. You need Hacknet Pathfinder to use this mod.\r\n\r\nUsage\r\n\r\nUsage: alias [-h] [-l] [-i] [name[=value] ... ]\r\n\r\n    -h    display usage help\r\n    -l    reload aliases from alias file\r\n    -i    display mod info\r\n\r\nExamples:\r\n    alias ssh='SSHcrack 22'\r\n    alias sh='shell'\r\n\r\nTo create a multicommand alias:\r\n    alias hack='SSHcrack 22; FTPBounce 21'\r\n\r\nunalias <name>\r\nAlias File\r\n\r\nAliases are stored in ~/sys/aliases.sys and reloaded every time the game is restarted. If you edit the file manually, you will have to use the alias -l command to reload your aliases. You can also remove this file completely to remove all of your aliases at once."
 }
