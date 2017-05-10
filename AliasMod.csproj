@@ -51,7 +51,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Alias.cs" />
-    <None Include="AliasMod.hackmod" />
+    <None Include="AliasMod.hackmod">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="CHANGELOG" />
     <Compile Include="Commands.cs" />
     <Compile Include="AliasMod.cs" />
