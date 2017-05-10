@@ -54,9 +54,6 @@
     <None Include="AliasMod.hackmod">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="CHANGELOG">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <Compile Include="Commands.cs" />
     <Compile Include="AliasMod.cs" />
     <Compile Include="KeyValueFile.cs" />
