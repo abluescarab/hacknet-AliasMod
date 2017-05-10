@@ -52,9 +52,11 @@
   <ItemGroup>
     <Compile Include="Alias.cs" />
     <None Include="AliasMod.hackmod">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="CHANGELOG" />
+    <None Include="CHANGELOG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Compile Include="Commands.cs" />
     <Compile Include="AliasMod.cs" />
     <Compile Include="KeyValueFile.cs" />
