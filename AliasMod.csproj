@@ -36,11 +36,15 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Hacknet">
-      <HintPath>E:\Games\steamapps\common\Hacknet\Hacknet.exe</HintPath>
+    <Reference Include="FNA">
+      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Hacknet\FNA.dll</HintPath>
     </Reference>
-    <Reference Include="Pathfinder">
-      <HintPath>E:\Games\steamapps\common\Hacknet\Pathfinder.dll</HintPath>
+    <Reference Include="HacknetPathfinder">
+      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Hacknet\HacknetPathfinder.exe</HintPath>
+    </Reference>
+    <Reference Include="Pathfinder, Version=2.0.6322.26280, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Hacknet\Pathfinder.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
