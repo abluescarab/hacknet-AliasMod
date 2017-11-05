@@ -11,10 +11,12 @@ namespace AliasMod {
             private static bool firstRun = true;
 
             private static string usage =
-                "Usage: alias [-h] [-l] [-i] [name[=value] ... ]" +
+                "---------------------------------" +
+                "\nUsage: alias [option] [name[=value] ... ]" +
                 "\n" +
-                "\n    -h    display usage help" +
                 "\n    -l    reload aliases from alias file" +
+                "\n    -v    display verbose alias list" +
+                "\n    -h    display usage help" +
                 "\n    -i    display mod info" +
                 "\n" +
                 "\nExamples:" +
@@ -22,7 +24,11 @@ namespace AliasMod {
                 "\n    alias sh='shell'" +
                 "\n" +
                 "\nTo create a multicommand alias:" +
-                "\n    alias hack='SSHcrack 22; FTPBounce 21'";
+                "\n    alias hack='SSHcrack 22; FTPBounce 21'" +
+                "\n" +
+                "\nTo remove an alias:" +
+                "\n    unalias <alias>" +
+                "\n---------------------------------";
 
             /// <summary>
             /// Run the alias command.
@@ -32,34 +38,32 @@ namespace AliasMod {
                     Load(os);
                 }
 
-                os.write("\n");
-
                 if(args.Count < 2) {
-                    os.write("Type \"alias -h\" to see usage instructions.");
-                    os.write("\n");
-                    Show(os);
+                    Show(os, false);
                 }
                 else {
                     int startArg = 1;
 
-                    while(ParseArg(os, args[startArg])) {
+                    while((startArg < args.Count) && ParseOptions(os, args[startArg])) {
                         startArg++;
                     }
 
-                    string name = args[startArg];
+                    if(startArg == 1) {
+                        string name = args[startArg];
 
-                    if(!args[startArg].Contains("=")) {
-                        if(AliasMod.aliases.ContainsKey(name)) {
-                            Logger.Verbose(AliasMod.aliases[name].Command);
-                            os.write(KeyValueFile.ToKeyValueString(name, AliasMod.aliases[name].Command));
+                        if(!args[startArg].Contains("=")) {
+                            if(AliasMod.aliases.ContainsKey(name)) {
+                                Logger.Verbose(AliasMod.aliases[name].Command);
+                                os.write(KeyValueFile.ToKeyValueString(name, AliasMod.aliases[name].Command));
+                            }
+                            else {
+                                os.write("Alias \"" + name + "\" not found");
+                            }
                         }
                         else {
-                            os.write("Alias '" + name + "' not found");
+                            os.write("Alias added: " + Add(os, string.Join(" ", args.ToArray(), startArg,
+                                args.Count - startArg)).Name);
                         }
-                    }
-                    else {
-                        os.write("Alias added: " + Add(os, string.Join(" ", args.ToArray(), startArg, args.Count - startArg))
-                            .Name);
                     }
                 }
 
@@ -67,54 +71,64 @@ namespace AliasMod {
             }
 
             /// <summary>
-            /// Parse an argument.
+            /// Parse option arguments.
             /// </summary>
-            /// <returns>true if option (--) arg; false otherwise</returns>
-            private static bool ParseArg(OS os, string arg) {
-                bool option = true;
+            /// <returns>true if option (-) arg; false otherwise</returns>
+            private static bool ParseOptions(OS os, string arg) {
+                if(arg.StartsWith("-")) {
+                    switch(arg) {
+                        case "-l":
+                            Load(os);
+                            break;
+                        case "-v":
+                            Show(os, true);
+                            break;
+                        case "-h":
+                            os.write(usage);
+                            break;
+                        case "-i":
+                            ShowInfo(os);
+                            break;
+                        default:
+                            os.write("Argument \"" + arg + "\" not found.");
+                            break;
+                    }
 
-                switch(arg) {
-                    case "-h":
-                        os.write(usage);
-                        break;
-                    case "-l":
-                        Load(os);
-                        break;
-                    case "-i":
-                        ShowInfo(os);
-                        break;
-                    default:
-                        option = false;
-                        break;
+                    return true;
                 }
 
-                return option;
+                return false;
             }
 
             /// <summary>
             /// Show info about the mod.
             /// </summary>
             private static void ShowInfo(OS os) {
-                os.write(
-                    AliasMod.Name +
-                    "\nVersion: " + AliasMod.Version +
-                    "\nAuthor: " + AliasMod.Author +
-                    "\nHomepage: " + AliasMod.Homepage
-                );
+                os.write("---------------------------------");
+                os.write(AliasMod.Name + " v" + AliasMod.Version.Replace("_", "."));
+                os.write("Author: " + AliasMod.Author);
+                os.write("Homepage: " + AliasMod.Homepage);
+                os.write("---------------------------------");
             }
 
             /// <summary>
             /// Show the list of aliases.
             /// </summary>
-            private static void Show(OS os) {
+            private static void Show(OS os, bool verbose) {
+                os.write("---------------------------------");
+                os.write("Type \"alias -h\" to see usage instructions.");
+                os.write("\n");
+
                 if(AliasMod.aliases.Count < 1) {
                     os.write("There are no aliases.");
                 }
                 else {
                     foreach(Alias alias in AliasMod.aliases.Values) {
-                        os.write(alias.Name);
+                        os.write(alias.Name + (verbose ? "='" + alias.Command + "'" : ""));
                     }
                 }
+
+                os.write("---------------------------------");
             }
 
             /// <summary>
@@ -122,7 +136,7 @@ namespace AliasMod {
             /// </summary>
             private static Alias Add(OS os, string alias) {
                 Alias al = null;
-                
+
                 string name = alias.Remove(alias.IndexOf('='));
                 string command = KeyValueFile.StripQuotes(alias.Remove(0, alias.IndexOf('=') + 1));
 
@@ -172,14 +186,12 @@ namespace AliasMod {
             /// Run the alias command.
             /// </summary>
             public static bool RunCommand(OS os, List<string> args) {
-                os.write("\n");
-
                 if(args.Count < 2) {
                     os.write(usage);
                     return false;
                 }
 
-                if(Remove(os, args[1])) os.write("Alias removed: " + args[1]);
+                if(Remove(os, args[1])) os.write("Alias removed: \"" + args[1] + "\"");
 
                 return true;
             }
