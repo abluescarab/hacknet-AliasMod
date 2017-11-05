@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Hacknet;
 using Pathfinder;
 using Pathfinder.Command;
 using Pathfinder.Event;
@@ -7,7 +9,7 @@ using Pathfinder.Util;
 namespace AliasMod {
     public class AliasMod : IPathfinderMod {
         public const string Name = "Alias Mod";
-        public const string Version = "4_4";
+        public const string Version = "4_5";
         public static KeyValueFile File;
         public const string ID = Name + " v" + Version;
         public const string Homepage = "https://github.com/abluescarab/hacknet-aliasmod";
@@ -23,8 +25,10 @@ namespace AliasMod {
         }
 
         public void LoadContent() {
-            Handler.AddCommand(Commands.AliasCmd.Key, Commands.AliasCmd.RunCommand, Commands.AliasCmd.Description, true);
-            Handler.AddCommand(Commands.UnaliasCmd.Key, Commands.UnaliasCmd.RunCommand, Commands.UnaliasCmd.Description, true);
+            Logger.Info("Command {0} registered.", Handler.RegisterCommand(Commands.AliasCmd.Key,
+                (Handler.CommandFunc)Commands.AliasCmd.RunCommand, Commands.AliasCmd.Description, true));
+            Logger.Info("Command {0} registered.", Handler.RegisterCommand(Commands.UnaliasCmd.Key,
+                (Handler.CommandFunc)Commands.UnaliasCmd.RunCommand, Commands.UnaliasCmd.Description, true));
         }
 
         public void Unload() {
