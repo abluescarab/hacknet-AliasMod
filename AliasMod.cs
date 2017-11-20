@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using Hacknet;
-using Pathfinder;
+﻿using System.Collections.Generic;
 using Pathfinder.Command;
 using Pathfinder.Event;
+using Pathfinder.ModManager;
 using Pathfinder.Util;
 
 namespace AliasMod {
-    public class AliasMod : IPathfinderMod {
+    public class AliasMod : IMod {
         public const string Name = "Alias Mod";
         public const string Version = "4_5";
         public static KeyValueFile File;
@@ -21,20 +19,20 @@ namespace AliasMod {
         public void Load() {
             Logger.Verbose("Loading " + ID + "...");
             EventManager.RegisterListener<CommandSentEvent>(CheckCommand);
-            EventManager.RegisterListener<OSPostLoadContenEvent>(LoadAliases);
+            EventManager.RegisterListener<OSPostLoadContentEvent>(LoadAliases);
         }
 
         public void LoadContent() {
             Logger.Info("Command {0} registered.", Handler.RegisterCommand(Commands.AliasCmd.Key,
-                (Handler.CommandFunc)Commands.AliasCmd.RunCommand, Commands.AliasCmd.Description, true));
+                Commands.AliasCmd.RunCommand, Commands.AliasCmd.Description, true));
             Logger.Info("Command {0} registered.", Handler.RegisterCommand(Commands.UnaliasCmd.Key,
-                (Handler.CommandFunc)Commands.UnaliasCmd.RunCommand, Commands.UnaliasCmd.Description, true));
+                Commands.UnaliasCmd.RunCommand, Commands.UnaliasCmd.Description, true));
         }
 
         public void Unload() {
             Logger.Verbose("Unloading " + ID + "...");
             EventManager.UnregisterListener<CommandSentEvent>(CheckCommand);
-            EventManager.UnregisterListener<OSPostLoadContenEvent>(LoadAliases);
+            EventManager.UnregisterListener<OSPostLoadContentEvent>(LoadAliases);
         }
 
         /// <summary>
@@ -50,7 +48,7 @@ namespace AliasMod {
         /// <summary>
         /// Load aliases on startup.
         /// </summary>
-        private void LoadAliases(OSPostLoadContenEvent e) {
+        private void LoadAliases(OSPostLoadContentEvent e) {
             File = new KeyValueFile(e.OS, "aliases.sys", "sys");
             Commands.AliasCmd.Load(e.OS);
         }
