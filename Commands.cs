@@ -10,7 +10,7 @@ namespace AliasMod {
 
             private static bool firstRun = true;
 
-            private static string usage =
+            private const string Usage =
                 "---------------------------------" +
                 "\nUsage: alias [option] [name[=value] ... ]" +
                 "\n" +
@@ -84,7 +84,7 @@ namespace AliasMod {
                             Show(os, true);
                             break;
                         case "-h":
-                            os.write(usage);
+                            os.write(Usage);
                             break;
                         case "-i":
                             ShowInfo(os);
@@ -180,14 +180,14 @@ namespace AliasMod {
             public static string Key = "unalias";
             public static string Description = "Remove aliases for commands";
 
-            private static string usage = "Usage: unalias <name>";
+            private const string Usage = "Usage: unalias <name>";
 
             /// <summary>
             /// Run the alias command.
             /// </summary>
             public static bool RunCommand(OS os, List<string> args) {
                 if(args.Count < 2) {
-                    os.write(usage);
+                    os.write(Usage);
                     return false;
                 }
 
