@@ -38,7 +38,7 @@ namespace AliasMod {
         /// <summary>
         /// Check if a command exists in the alias dictionary.
         /// </summary>
-        private void CheckCommand(CommandSentEvent e) {
+        private static void CheckCommand(CommandSentEvent e) {
             if(aliases.ContainsKey(e.Arguments[0])) {
                 e.IsCancelled = true;
                 aliases[e.Arguments[0]].RunCommand(e.OS, e.Arguments);
@@ -48,7 +48,7 @@ namespace AliasMod {
         /// <summary>
         /// Load aliases on startup.
         /// </summary>
-        private void LoadAliases(OSPostLoadContentEvent e) {
+        private static void LoadAliases(OSPostLoadContentEvent e) {
             File = new KeyValueFile(e.OS, "aliases.sys", "sys");
             Commands.AliasCmd.Load(e.OS);
         }
