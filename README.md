@@ -1,6 +1,8 @@
 # Alias Mod
 This mod adds the ability to alias commands in Hacknet. You need [Hacknet Pathfinder](https://github.com/Arkhist/Hacknet-Pathfinder/releases) to use this mod.
 
+**Note: Due to a bug in Pathfinder 5.0.1, your aliases will not automatically reload when the game starts. You can enter any "alias" or "unalias" command to load the file.**
+
 ## Usage
 
     Usage: alias [option] [name[=value] ... ]

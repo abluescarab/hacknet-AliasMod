@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Hacknet;
@@ -13,17 +14,15 @@ namespace AliasMod {
         public bool AutoSortDescending { get; set; }
         public string Name { get; private set; }
         public string Path {
-            get { return path; }
-            set { path = value.TrimEnd('/', '\\'); }
+            get => path;
+            set => path = value.TrimEnd('/', '\\');
         }
-        public string FullPath {
-            get { return Path + "/" + Name; }
-        }
+        public string FullPath => Path + "/" + Name;
         public string Data {
-            get { return File.data; }
+            get => File.data;
             private set {
                 File.data = value;
-                
+
                 if(AutoSort && doSort) SortAlphabetic(AutoSortDescending);
             }
         }
@@ -156,7 +155,7 @@ namespace AliasMod {
             string data = AsString(key);
             return ToKeyValuePair(data);
         }
-        
+
         /// <summary>
         /// Get a key/value pair by line number as a KeyValuePair.
         /// </summary>

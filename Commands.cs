@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Hacknet;
-using Pathfinder.Util;
 
 namespace AliasMod {
     static class Commands {
@@ -33,18 +33,18 @@ namespace AliasMod {
             /// <summary>
             /// Run the alias command.
             /// </summary>
-            public static bool RunCommand(OS os, List<string> args) {
+            public static void RunCommand(OS os, string[] args) {
                 if(firstRun) {
                     Load(os);
                 }
 
-                if(args.Count < 2) {
+                if(args.Length < 2) {
                     Show(os, false);
                 }
                 else {
                     int startArg = 1;
 
-                    while((startArg < args.Count) && ParseOptions(os, args[startArg])) {
+                    while((startArg < args.Length) && ParseOptions(os, args[startArg])) {
                         startArg++;
                     }
 
@@ -53,7 +53,6 @@ namespace AliasMod {
 
                         if(!args[startArg].Contains("=")) {
                             if(AliasMod.aliases.ContainsKey(name)) {
-                                Logger.Verbose(AliasMod.aliases[name].Command);
                                 os.write(KeyValueFile.ToKeyValueString(name, AliasMod.aliases[name].Command));
                             }
                             else {
@@ -61,13 +60,11 @@ namespace AliasMod {
                             }
                         }
                         else {
-                            os.write("Alias added: " + Add(os, string.Join(" ", args.ToArray(), startArg,
-                                args.Count - startArg)).Name);
+                            os.write("Alias added: " + Add(os, string.Join(" ", args, startArg,
+                                args.Length - startArg)).Name);
                         }
                     }
                 }
-
-                return true;
             }
 
             /// <summary>
@@ -143,12 +140,12 @@ namespace AliasMod {
                 if(AliasMod.aliases.ContainsKey(name)) {
                     al = AliasMod.aliases[name];
                     al.Command = command;
-                    AliasMod.File.Replace(name, command);
+                    AliasMod.file.Replace(name, command);
                 }
                 else {
                     al = new Alias(name, command);
                     AliasMod.aliases[name] = al;
-                    AliasMod.File.Append(name, command);
+                    AliasMod.file.Append(name, command);
                 }
 
                 return al;
@@ -158,13 +155,19 @@ namespace AliasMod {
             /// Reload the aliases from their file.
             /// </summary>
             public static void Load(OS os) {
+                if(AliasMod.file == null) {
+                    AliasMod.file = new KeyValueFile(os, "aliases.sys", "sys");
+                }
+
                 if(AliasMod.aliases == null) {
                     AliasMod.aliases = new SortedDictionary<string, Alias>();
                 }
-                else AliasMod.aliases.Clear();
+                else {
+                    AliasMod.aliases.Clear();
+                }
 
-                if(!string.IsNullOrWhiteSpace(AliasMod.File.Data)) {
-                    foreach(KeyValuePair<string, string> pair in AliasMod.File.All()) {
+                if(!string.IsNullOrWhiteSpace(AliasMod.file.Data)) {
+                    foreach(KeyValuePair<string, string> pair in AliasMod.file.All()) {
                         Alias alias = new Alias(pair.Key, pair.Value);
                         AliasMod.aliases[pair.Key] = alias;
                     }
@@ -185,15 +188,14 @@ namespace AliasMod {
             /// <summary>
             /// Run the alias command.
             /// </summary>
-            public static bool RunCommand(OS os, List<string> args) {
-                if(args.Count < 2) {
+            public static void RunCommand(OS os, string[] args) {
+                if(args.Length < 2) {
                     os.write(Usage);
-                    return false;
+                    return;
                 }
 
-                if(Remove(os, args[1])) os.write("Alias removed: \"" + args[1] + "\"");
-
-                return true;
+                if(Remove(os, args[1]))
+                    os.write("Alias removed: \"" + args[1] + "\"");
             }
 
             /// <summary>
@@ -205,7 +207,7 @@ namespace AliasMod {
                 }
 
                 AliasMod.aliases[name].Command = "";
-                AliasMod.File.Remove(name);
+                AliasMod.file.Remove(name);
                 AliasMod.aliases.Remove(name);
                 return true;
             }

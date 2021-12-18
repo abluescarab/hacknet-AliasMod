@@ -1,56 +1,63 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using BepInEx;
+using BepInEx.Hacknet;
 using Pathfinder.Command;
 using Pathfinder.Event;
-using Pathfinder.ModManager;
-using Pathfinder.Util;
+using Pathfinder.Event.Gameplay;
+using Pathfinder.Event.Loading;
 
 namespace AliasMod {
-    public class AliasMod : IMod {
+    [BepInPlugin(GUID, Name, Version)]
+    public class AliasMod : HacknetPlugin {
+        public const string GUID = "io.github.abluescarab.AliasMod";
         public const string Name = "Alias Mod";
-        public const string Version = "4_6";
-        public static KeyValueFile File;
-        public const string ID = Name + " v" + Version;
-        public const string Homepage = "https://github.com/abluescarab/hacknet-aliasmod";
+        public const string Version = "5.0";
         public const string Author = "abluescarab";
-        public string Identifier => ID;
+        public const string Homepage = "https://github.com/abluescarab/hacknet-AliasMod";
 
+        public static KeyValueFile file;
         public static SortedDictionary<string, Alias> aliases;
 
-        public void Load() {
-            Logger.Verbose("Loading " + ID + "...");
-            EventManager.RegisterListener<CommandSentEvent>(CheckCommand);
-            EventManager.RegisterListener<OSPostLoadContentEvent>(LoadAliases);
+        public override bool Load() {
+            CommandManager.RegisterCommand(Commands.AliasCmd.Key, Commands.AliasCmd.RunCommand);
+            CommandManager.RegisterCommand(Commands.UnaliasCmd.Key, Commands.UnaliasCmd.RunCommand);
+            EventManager<OSLoadedEvent>.AddHandler(LoadAliases);
+            EventManager<CommandExecuteEvent>.AddHandler(CheckCommand);
+
+            return true;
         }
 
-        public void LoadContent() {
-            Logger.Info("Command {0} registered.", Handler.RegisterCommand(Commands.AliasCmd.Key,
-                Commands.AliasCmd.RunCommand, Commands.AliasCmd.Description, true));
-            Logger.Info("Command {0} registered.", Handler.RegisterCommand(Commands.UnaliasCmd.Key,
-                Commands.UnaliasCmd.RunCommand, Commands.UnaliasCmd.Description, true));
-        }
+        public override bool Unload() {
+            CommandManager.UnregisterCommand(Commands.AliasCmd.Key);
+            CommandManager.UnregisterCommand(Commands.UnaliasCmd.Key);
+            EventManager<OSLoadedEvent>.RemoveHandler(LoadAliases);
+            EventManager<CommandExecuteEvent>.RemoveHandler(CheckCommand);
 
-        public void Unload() {
-            Logger.Verbose("Unloading " + ID + "...");
-            EventManager.UnregisterListener<CommandSentEvent>(CheckCommand);
-            EventManager.UnregisterListener<OSPostLoadContentEvent>(LoadAliases);
+            aliases.Clear();
+            aliases = null;
+            file = null;
+
+            return base.Unload();
         }
 
         /// <summary>
         /// Check if a command exists in the alias dictionary.
         /// </summary>
-        private static void CheckCommand(CommandSentEvent e) {
-            if(aliases.ContainsKey(e.Arguments[0])) {
-                e.IsCancelled = true;
-                aliases[e.Arguments[0]].RunCommand(e.OS, e.Arguments);
-            }
+        private static void CheckCommand(CommandExecuteEvent e) {
+            if(aliases == null || !aliases.TryGetValue(e.Args[0], out Alias alias))
+                return;
+
+            e.Cancelled = true;
+            alias.RunCommand(e.Os, e.Args);
         }
 
         /// <summary>
         /// Load aliases on startup.
         /// </summary>
-        private static void LoadAliases(OSPostLoadContentEvent e) {
-            File = new KeyValueFile(e.OS, "aliases.sys", "sys");
-            Commands.AliasCmd.Load(e.OS);
+        private static void LoadAliases(OSLoadedEvent e) {
+            Console.WriteLine("test");
+            Commands.AliasCmd.Load(e.Os);
         }
     }
 }

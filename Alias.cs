@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using Hacknet;
 
 namespace AliasMod {
@@ -12,31 +11,30 @@ namespace AliasMod {
             Command = command;
         }
 
-        public bool RunCommand(OS os, List<string> args) {
-            if(string.IsNullOrEmpty(Command)) {
+        public bool RunCommand(OS os, string[] args) {
+            if(string.IsNullOrEmpty(Command))
                 return false;
+
+            if(Command.Contains(";")) {
+                string[] commands = Command.Split(';');
+
+                foreach(string command in commands) {
+                    os.execute(command.Trim());
+                }
             }
             else {
-                if(Command.Contains(";")) {
-                    string[] commands = Command.Split(';');
-                    foreach(string command in commands) {
-                        os.execute(command.Trim());
-                    }
+                if(args.Length > 1) {
+                    string command = string.Join(" ", args);
+                    command = command.Substring(command.IndexOf(Name) + Name.Length + 1);
+                    command = Command + (Regex.IsMatch(command, @"^(/|\))") ? "" : " ") + command;
+                    os.execute(command);
                 }
                 else {
-                    if(args.Count > 1) {
-                        string command = string.Join(" ", args.ToArray());
-                        command = command.Substring(command.IndexOf(Name) + Name.Length + 1);
-                        command = Command + (Regex.IsMatch(command, @"^(/|\))") ? "" : " ") + command;
-                        os.execute(command);
-                    }
-                    else {
-                        os.execute(Command);
-                    }
+                    os.execute(Command);
                 }
-
-                return true;
             }
+
+            return true;
         }
     }
 }
